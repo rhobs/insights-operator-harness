@@ -1,0 +1,9 @@
+[submodule "projects/insights-operator"]
+	path = projects/insights-operator
+	url = https://github.com/openshift/insights-operator
+[submodule "projects/insights-runtime-extractor"]
+	path = projects/insights-runtime-extractor
+	url = https://github.com/openshift/insights-runtime-extractor
+[submodule "projects/deployment-validation-operator"]
+	path = projects/deployment-validation-operator
+	url = https://github.com/app-sre/deployment-validation-operator
