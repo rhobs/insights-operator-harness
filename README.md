@@ -23,6 +23,11 @@ Update a submodule to latest upstream:
 git submodule update --remote projects/<name>
 ```
 
+## Documentation
+
+- [ARCHITECTURE.md](ARCHITECTURE.md) — component overview and subsystem descriptions
+- [CONTRIBUTING.md](CONTRIBUTING.md) — how to add features, test changes on a cluster, and run integration tests
+
 ## Links
 
 - **Documentation:** https://ccx.pages.redhat.com/ccx-docs/
