@@ -10,6 +10,18 @@ This is a structured workspace (harness) for the OpenShift Insights Operator eco
 
 - https://ccx.pages.redhat.com/ccx-docs/
 - **Enhancement proposals** (architecture/design/feature decisions): https://github.com/openshift/enhancements/tree/master/enhancements/insights
+- [development/CONTRIBUTING.md](development/CONTRIBUTING.md) — contribution workflows for the projects in this harness
+
+## Task workflow
+
+This harness tracks in-progress work as local files, separate from the submodules:
+
+- `templates/{spec,plan,execution}.md` — templates for defining a task, agreeing a plan, and tracking execution
+- `tasks/<task-name>/` — gitignored, local working copy of the above for an in-progress task (see `tasks/README.md`)
+- `completed/` — gitignored; finished task directories are moved here
+- `.agents/skills/` — harness-wide skills (as opposed to project-specific skills under `projects/<name>/.claude/skills/`)
+
+Jira and GitHub PRs remain the record of truth; nothing under `tasks/` or `completed/` is committed.
 
 ## CI configuration
 

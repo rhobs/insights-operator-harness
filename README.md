@@ -26,7 +26,7 @@ git submodule update --remote projects/<name>
 ## Documentation
 
 - [ARCHITECTURE.md](ARCHITECTURE.md) — component overview and subsystem descriptions
-- [CONTRIBUTING.md](CONTRIBUTING.md) — how to add features, test changes on a cluster, and run integration tests
+- [development/CONTRIBUTING.md](development/CONTRIBUTING.md) — how to add features, test changes on a cluster, and run integration tests
 
 ## Links
 
