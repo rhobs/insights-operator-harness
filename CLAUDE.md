@@ -17,11 +17,15 @@ This is a structured workspace (harness) for the OpenShift Insights Operator eco
 |---------|-----------|
 | insights-operator | https://github.com/openshift/release/tree/main/ci-operator/config/openshift/insights-operator |
 | insights-runtime-extractor | https://github.com/openshift/release/tree/main/ci-operator/config/openshift/insights-runtime-extractor |
+| deployment-validation-operator | https://github.com/openshift/release/tree/main/ci-operator/config/app-sre/deployment-validation-operator |
 
 ## Integration tests
 
-Integration tests for both insights-operator and insights-runtime-extractor:
+Integration tests for insights-operator and insights-runtime-extractor:
 https://gitlab.cee.redhat.com/ccx/insights-operator-tests
+
+Integration tests for deployment-validation-operator:
+https://gitlab.cee.redhat.com/ccx/deployment-validation-operator-tests
 
 ## Related repositories
 
@@ -71,9 +75,20 @@ make e2e-test        # build image then run e2e
 
 ### deployment-validation-operator (`projects/deployment-validation-operator`)
 ```bash
-make go-build   # build binary
-make test       # unit tests
-make lint       # golangci-lint
+make go-build      # build binary (vendors modules first) into build/_output/bin/
+make test          # unit tests
+make lint          # golangci-lint
+make coverage      # coverage script used by CI
+make docker-build  # container image
+make validate      # fail if the worktree has extra artifacts
+```
+
+Run the binary locally (metrics on port 8383):
+```bash
+POD_NAMESPACE="deployment-validation-operator" WATCH_NAMESPACE="" \
+  NAMESPACE_IGNORE_PATTERN='^(openshift.*|kube-.*)$' \
+  build/_output/bin/deployment-validation-operator \
+  --kubeconfig=$HOME/.kube/config --zap-devel
 ```
 
 ## Architecture
@@ -84,4 +99,4 @@ make lint       # golangci-lint
 - `extractor` container: a privileged coordinator that enters container process namespaces and runs `fingerprints` executables to extract runtime info, paired with an `extractor_server` TCP server that triggers extraction on demand.
 - `exporter` container: an HTTP server that triggers the extractor, reads results from a shared volume, and returns a JSON payload.
 
-**deployment-validation-operator** (from app-sre) validates Kubernetes deployment configurations.
+**deployment-validation-operator** (from app-sre) runs kube-linter checks against cluster workloads and exposes failed checks as Prometheus gauges on port 8383. It does not mutate objects and has no CRDs. Insights Operator scrapes Services labeled `name=deployment-validation-operator` and stores the `deployment_validation_operator_` metrics at `config/dvo_metrics` in the archive. Workload names are replaced with UIDs when DVO runs in `openshift-deployment-validation-operator`.
