@@ -34,5 +34,7 @@ git submodule update --remote projects/<name>
 - **Enhancement proposals** (architecture/design/feature decisions): https://github.com/openshift/enhancements/tree/master/enhancements/insights
 - **Insights CRDs** (`InsightsDataGather`, `DataGather`): https://github.com/openshift/api/tree/master/insights
 - **Integration tests** (insights-operator + insights-runtime-extractor): https://gitlab.cee.redhat.com/ccx/insights-operator-tests
+- **Integration tests** (deployment-validation-operator): https://gitlab.cee.redhat.com/ccx/deployment-validation-operator-tests
 - **CI config — insights-operator:** https://github.com/openshift/release/tree/main/ci-operator/config/openshift/insights-operator
 - **CI config — insights-runtime-extractor:** https://github.com/openshift/release/tree/main/ci-operator/config/openshift/insights-runtime-extractor
+- **CI config — deployment-validation-operator:** https://github.com/openshift/release/tree/main/ci-operator/config/app-sre/deployment-validation-operator
