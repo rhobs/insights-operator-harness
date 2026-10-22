@@ -1,3 +1,10 @@
 # Local task working files — not committed
 tasks/*/
 completed/
+
+# Python bytecode from skill scripts
+__pycache__/
+
+# Private GitLab test repos, if cloned inside the harness — never commit these
+projects/insights-operator-tests/
+projects/ccx-ocp-testlib/
