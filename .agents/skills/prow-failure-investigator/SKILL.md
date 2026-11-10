@@ -74,6 +74,12 @@ the end — the branch and flake verdict are useful before the root cause lands.
   not match the recorded pointer — note it, it changes what local greps mean.
 - Check the private test clones under `projects/` (snippet above). Do this up
   front: if they are missing, stage 5 is limited and the user should know early.
+- `projects/release` is the `openshift/release` submodule holding the ci-operator
+  config that defines the job itself (test list, base image, triggers). Read the
+  relevant `projects/release/ci-operator/config/.../<branch>.yaml` locally
+  instead of fetching from GitHub — see `references/ci-layout.md`. Useful when
+  the failure traces back to the job definition itself (wrong base image tag,
+  missing test entry, step-registry change) rather than product code.
 
 ### 2. Branch and submodule alignment
 

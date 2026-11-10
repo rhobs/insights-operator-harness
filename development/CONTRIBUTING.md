@@ -2,6 +2,29 @@
 
 This guide covers contribution workflows for the projects in this harness. Because **insights-operator**, **insights-runtime-extractor**, and **deployment-validation-operator** are all developed directly in their OpenShift/App-SRE repos (there is no separate community upstream to contribute to first), changes go straight to those repos.
 
+## CI (openshift/release)
+
+`projects/release` is a submodule of [openshift/release](https://github.com/openshift/release), the monorepo that defines Prow/ci-operator test jobs (presubmits, postsubmits, periodics) for OpenShift component repos, including insights-operator, insights-runtime-extractor, and deployment-validation-operator. Use it to fix a failing/flaky job, change what a job tests, or add a new job.
+
+Per-project config locations:
+
+| Project | Config path |
+|---------|-------------|
+| insights-operator | `ci-operator/config/openshift/insights-operator/` |
+| insights-runtime-extractor | `ci-operator/config/openshift/insights-runtime-extractor/` |
+| deployment-validation-operator | `ci-operator/config/app-sre/deployment-validation-operator/` |
+
+Each repo/branch has its own `<org>-<repo>-<branch>.yaml` file (e.g. `openshift-insights-operator-master.yaml`), and some branches have a separate `__periodics.yaml` variant for periodic-only jobs consumed by CI analytics tooling.
+
+**Workflow:**
+1. Edit the config file under `ci-operator/config/<org>/<repo>/` for the target branch. Never hand-edit `ci-operator/jobs/` — it's generated.
+2. From `projects/release`, run `make update` to regenerate `ci-operator/jobs/` and metadata, then `make checkconfig` to validate.
+3. Before writing a new multi-stage test step, chain, or workflow, search the existing `ci-operator/step-registry/` (or use that repo's `/step-finder` skill) to avoid duplicating one of the ~4,400 existing components.
+4. Commit both the edited config and the regenerated job files together.
+5. See `projects/release/CLAUDE.md` and `projects/release/README.md` for full conventions — release branching with `config-brancher`, step-registry structure, security practices for step scripts, etc.
+
+For debugging a specific failed Prow job (flake vs. regression, root cause in gatherer code), use the harness-wide `prow-failure-investigator` skill (`.agents/skills/prow-failure-investigator/SKILL.md`) instead of triaging manually.
+
 ## insights-operator
 
 ### Adding a new gatherer

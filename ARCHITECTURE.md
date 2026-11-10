@@ -112,6 +112,22 @@ When that Service is in `openshift-deployment-validation-operator`, workload `na
 
 ---
 
+### release
+
+**Repo:** https://github.com/openshift/release
+
+Not a runtime component of the ecosystem — this is the OpenShift CI configuration monorepo. It defines the Prow/ci-operator presubmit, postsubmit, and periodic jobs that build and test the three components above, plus the shared step-registry of reusable test steps/chains/workflows.
+
+**Relevant paths:**
+- `ci-operator/config/openshift/insights-operator/` and `ci-operator/config/openshift/insights-runtime-extractor/` — ci-operator config per branch
+- `ci-operator/config/app-sre/deployment-validation-operator/` — ci-operator config for DVO
+- `ci-operator/jobs/` — generated Prow jobs (never hand-edited; regenerate with `make update`)
+- `ci-operator/step-registry/` — reusable multi-stage test steps, chains, and workflows
+
+**Language:** YAML (generated/validated by containerized Go tooling)
+
+---
+
 ## API / CRD definitions
 
 The Insights Operator CRDs are defined outside the operator repo itself:
@@ -127,7 +143,8 @@ The Insights Operator CRDs are defined outside the operator repo itself:
 | Documentation | https://ccx.pages.redhat.com/ccx-docs/ |
 | Enhancement proposals | https://github.com/openshift/enhancements/tree/master/enhancements/insights |
 | Integration tests | https://gitlab.cee.redhat.com/ccx/insights-operator-tests |
-| CI — insights-operator | https://github.com/openshift/release/tree/main/ci-operator/config/openshift/insights-operator |
-| CI — insights-runtime-extractor | https://github.com/openshift/release/tree/main/ci-operator/config/openshift/insights-runtime-extractor |
-| CI — deployment-validation-operator | https://github.com/openshift/release/tree/main/ci-operator/config/app-sre/deployment-validation-operator |
 | Integration tests — DVO | https://gitlab.cee.redhat.com/ccx/deployment-validation-operator-tests |
+| CI — insights-operator | `projects/release/ci-operator/config/openshift/insights-operator/` |
+| CI — insights-runtime-extractor | `projects/release/ci-operator/config/openshift/insights-runtime-extractor/` |
+| CI — deployment-validation-operator | `projects/release/ci-operator/config/app-sre/deployment-validation-operator/` |
+| OpenShift CI docs | https://docs.ci.openshift.org/ |

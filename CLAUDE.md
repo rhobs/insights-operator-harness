@@ -25,11 +25,19 @@ Jira and GitHub PRs remain the record of truth; nothing under `tasks/` or `compl
 
 ## CI configuration
 
-| Project | CI config |
-|---------|-----------|
-| insights-operator | https://github.com/openshift/release/tree/main/ci-operator/config/openshift/insights-operator |
-| insights-runtime-extractor | https://github.com/openshift/release/tree/main/ci-operator/config/openshift/insights-runtime-extractor |
-| deployment-validation-operator | https://github.com/openshift/release/tree/main/ci-operator/config/app-sre/deployment-validation-operator |
+`projects/release` is a submodule of [openshift/release](https://github.com/openshift/release), the monorepo that defines Prow/ci-operator test jobs (presubmits, postsubmits, periodics) for OpenShift component repos. Use it to fix, update, or add CI jobs for the projects in this harness.
+
+| Project | CI config (in `projects/release`) | Generated Prow jobs |
+|---------|-----------|----------------------|
+| insights-operator | `ci-operator/config/openshift/insights-operator/` | `ci-operator/jobs/openshift/insights-operator/` |
+| insights-runtime-extractor | `ci-operator/config/openshift/insights-runtime-extractor/` | `ci-operator/jobs/openshift/insights-runtime-extractor/` |
+| deployment-validation-operator | `ci-operator/config/app-sre/deployment-validation-operator/` | `ci-operator/jobs/app-sre/deployment-validation-operator/` |
+
+Workflow for changing CI:
+1. Edit the relevant `ci-operator/config/<org>/<repo>/<org>-<repo>-<branch>.yaml` file (never hand-edit `ci-operator/jobs/`, it's generated).
+2. From `projects/release`, run `make update` to regenerate Prow jobs and metadata, then `make checkconfig` to validate.
+3. Reusable multi-stage test steps/chains/workflows live under `projects/release/ci-operator/step-registry/`; search there (or use the repo's `/step-finder` skill) before adding new ones.
+4. See `projects/release/CLAUDE.md` for the full set of conventions (variant `__periodics.yaml` files, `config-brancher` for branching release configs, etc).
 
 ## Integration tests
 
@@ -50,6 +58,7 @@ https://gitlab.cee.redhat.com/ccx/deployment-validation-operator-tests
 | `projects/insights-operator` | github.com/openshift/insights-operator | Go |
 | `projects/insights-runtime-extractor` | github.com/openshift/insights-runtime-extractor | Rust + Go |
 | `projects/deployment-validation-operator` | github.com/app-sre/deployment-validation-operator | Go |
+| `projects/release` | github.com/openshift/release | Prow/ci-operator config (YAML) |
 
 Clone with submodules:
 ```bash
@@ -112,3 +121,5 @@ POD_NAMESPACE="deployment-validation-operator" WATCH_NAMESPACE="" \
 - `exporter` container: an HTTP server that triggers the extractor, reads results from a shared volume, and returns a JSON payload.
 
 **deployment-validation-operator** (from app-sre) runs kube-linter checks against cluster workloads and exposes failed checks as Prometheus gauges on port 8383. It does not mutate objects and has no CRDs. Insights Operator scrapes Services labeled `name=deployment-validation-operator` and stores the `deployment_validation_operator_` metrics at `config/dvo_metrics` in the archive. Workload names are replaced with UIDs when DVO runs in `openshift-deployment-validation-operator`.
+
+**release** (`projects/release`, a.k.a. `openshift/release`) is not a runtime component — it is the CI configuration monorepo. It defines the ci-operator/Prow test jobs that build, test, and gate the three components above (see [CI configuration](#ci-configuration)).

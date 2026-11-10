@@ -7,3 +7,6 @@
 [submodule "projects/deployment-validation-operator"]
 	path = projects/deployment-validation-operator
 	url = https://github.com/app-sre/deployment-validation-operator
+[submodule "projects/release"]
+	path = projects/release
+	url = https://github.com/openshift/release
