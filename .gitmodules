@@ -10,3 +10,6 @@
 [submodule "projects/release"]
 	path = projects/release
 	url = https://github.com/openshift/release
+[submodule "projects/origin"]
+	path = projects/origin
+	url = https://github.com/openshift/origin.git
